@@ -21,7 +21,7 @@ Recall the Leslie matrix from EDS 212. Matrix multiplication (using the dot prod
 ### Create the Leslie matrix:
 
 ```{r}
-# Make the Leslie Matrix:
+# Make the Leslie Matrix: stage survived to the next cycle
 fish_leslie <- matrix(c(0, 0, 0, 600, 0.05, 0, 0, 0, 0, 0.20, 0, 0, 0, 0, 0.16, 0.9), nrow = 4, ncol = 4, byrow = TRUE)
 
 # Check it out: 
@@ -43,22 +43,22 @@ Add line-by-line comments wheres prompted in the code below, explaining what eac
 # ------ WHAT HAPPENS HERE? ------ #
 # ------ comment line-by-line ---- #
 
-# The line below...
+# The line below... stores a sequence of year starting at 0 going to year 8 in increments of 1
 time_yr <- seq(from = 0, to = 8, by = 1)
 
-# The line below...
+# The line below... creating a matrix that has fish population in the columns and the rows have year || making a placeholder matrix, once we go through our iteration, it will be populated
 proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
 
-# The line below...
+# The line below... this is showing how the points will be plotted || putting in the first row as the initial row, we had an existing vector of the intial condition, put that inital condition to the first row (we use row, column)
 proj_year[1, ] <- fish_year0
 
-# The for loop below...
+# The for loop below...2:___ it's the seq at 2, putting in the rest of the year || why is she starting at 2? it's cause the first row already had the population, what are you looping over? starting at fish leslie, take the dot product of that matrix taking OUT the previous years data, taking the dot product with the inital year what comes out of that is the vector of the i-th row... what row is getting populated -> row 2
 for (i in 2:length(time_yr)) {
   proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
 }
 
 
-# The rest is wrangling & visualization (run to check it out):
+# The rest is wrangling & visualization (run to check it out): first line, renames the columns, second line she binds together proj_year w/ time_year, colaps everything
 colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult")
 
 proj_df <- data.frame(time_yr, proj_year) %>% 
